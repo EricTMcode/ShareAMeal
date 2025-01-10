@@ -20,10 +20,37 @@ struct SelectFoodbankView: View {
                 ProgressView("Loading...")
 
             case .failed:
-                Text("Oops")
+                ContentUnavailableView {
+                    Label("Load failed", systemImage: "exclamationmark.triangle")
+                } description: {
+                    Text("Loading failed; please try again")
+                } actions: {
+                    Button("Retry", systemImage: "arrow.circlepath", action: fetchFoodbanks)
+                        .bold()
+                        .buttonStyle(.borderedProminent)
+                }
 
             case .loaded(let foodbanks):
-                Text("Found \(foodbanks.count) food banks")
+                List {
+                    ForEach(foodbanks) { foodbank in
+                        Section {
+                            VStack(alignment: .leading) {
+                                Text(foodbank.name)
+                                    .font(.title)
+
+                                Text(foodbank.address)
+
+                                Button("Select this foodbank") {
+
+                                }
+                                .buttonStyle(.borderless)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 5)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
             }
         }
         .navigationTitle("Nearby Foodbanks")

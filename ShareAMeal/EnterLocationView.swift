@@ -24,7 +24,7 @@ struct EnterLocationView: View {
                         .frame(maxWidth: 200)
 
                     NavigationLink("Go") {
-
+                        SelectFoodbankView(postCode: postCode)
                     }
                     .buttonStyle(.borderedProminent)
                 }
