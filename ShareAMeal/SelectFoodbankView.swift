@@ -33,7 +33,7 @@ struct SelectFoodbankView: View {
             case .loaded(let foodbanks):
                 List {
                     ForEach(foodbanks) { foodbank in
-                        Section {
+                        Section(foodbank.distanceFormatted) {
                             VStack(alignment: .leading) {
                                 Text(foodbank.name)
                                     .font(.title)
@@ -41,7 +41,9 @@ struct SelectFoodbankView: View {
                                 Text(foodbank.address)
 
                                 Button("Select this foodbank") {
-
+                                    withAnimation {
+                                        dataController.select(foodbank)
+                                    }
                                 }
                                 .buttonStyle(.borderless)
                                 .frame(maxWidth: .infinity, alignment: .center)

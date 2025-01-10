@@ -13,6 +13,8 @@ enum LoadState {
 
 @Observable
 class DataController {
+    private(set) var selectedFoodbank: Foodbank?
+
     func loadFoodbanks(near postCode: String) async -> LoadState {
         let fullURL = "https://www.givefood.org.uk/api/2/foodbanks/search/?address=\(postCode)"
 
@@ -28,5 +30,9 @@ class DataController {
         } catch {
             return .failed
         }
+    }
+
+    func select(_ foodbank: Foodbank?) {
+        selectedFoodbank = foodbank
     }
 }
