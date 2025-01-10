@@ -15,6 +15,27 @@ enum LoadState {
 class DataController {
     private(set) var selectedFoodbank: Foodbank?
 
+    private let savePath = URL.documentsDirectory.appending(path: "SelectedFoodbank")
+
+    init() {
+        do {
+            let data = try Data(contentsOf: savePath)
+            let savedFoodbank = try JSONDecoder().decode(Foodbank.self, from: data)
+            select(savedFoodbank)
+        } catch {
+
+        }
+    }
+
+    func save() {
+        do {
+            let data = try JSONEncoder().encode(selectedFoodbank)
+            try data.write(to: savePath, options: [.atomic, .completeFileProtection])
+        } catch {
+            print("Unable to save data")
+        }
+    }
+
     func loadFoodbanks(near postCode: String) async -> LoadState {
         let fullURL = "https://www.givefood.org.uk/api/2/foodbanks/search/?address=\(postCode)"
 
@@ -34,5 +55,6 @@ class DataController {
 
     func select(_ foodbank: Foodbank?) {
         selectedFoodbank = foodbank
+        save()
     }
 }
