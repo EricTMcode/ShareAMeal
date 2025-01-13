@@ -9,12 +9,12 @@ import Foundation
 
 struct Foodbank: Codable, Identifiable {
     enum CodingKeys: String, CodingKey {
-        case name, slug, phone, email, address, distance = "distance_m", items = "needs"
+        case slug, name, phone, email, address, distance = "distance_m", items = "needs"
     }
 
     var id: String { slug }
-    var slug: String
     var name: String
+    var slug: String
     var phone: String
     var email: String
     var address: String
@@ -32,6 +32,8 @@ struct Foodbank: Codable, Identifiable {
         let baseList = items.needs.components(separatedBy: .newlines)
         return Set(baseList).sorted()
     }
+
+    static let example = Foodbank(name: "Example Name", slug: "Example Slug", phone: "Phone", email: "Email", address: "Address", distance: 1000, items: .example)
 }
 
 extension Foodbank {
