@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         if let selectedFoodbank = dataController.selectedFoodbank {
             TabView {
-                Text("Home")
+                HomeView(foodbank: selectedFoodbank)
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }

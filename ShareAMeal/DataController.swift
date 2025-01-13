@@ -56,5 +56,23 @@ class DataController {
     func select(_ foodbank: Foodbank?) {
         selectedFoodbank = foodbank
         save()
+
+        Task {
+            try await updateSelected()
+        }
+    }
+
+    private func updateSelected() async {
+        guard let current = selectedFoodbank else { return }
+
+        let fullURL = "https://www.givefood.org.uk/api/2/foodbank/\(current.slug)"
+        guard let url = URL(string: fullURL) else { return }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            selectedFoodbank = try JSONDecoder().decode(Foodbank.self, from: data)
+        } catch {
+            print("Failed to decode: \(error.localizedDescription)")
+        }
     }
 }
