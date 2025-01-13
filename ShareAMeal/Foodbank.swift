@@ -21,6 +21,7 @@ struct Foodbank: Codable, Identifiable {
     var address: String
     var distance: Int
     var items: Items
+    var locations: [Location]?
 
     var distanceFormatted: String {
         let measurement = Measurement(value: Double(distance), unit: UnitLength.meters)
