@@ -9,7 +9,7 @@ import Foundation
 
 struct Foodbank: Codable, Identifiable {
     enum CodingKeys: String, CodingKey {
-        case name, slug, phone, email, address, distance = "distance_m", items
+        case name, slug, phone, email, address, distance = "distance_m", items = "needs"
     }
 
     var id: String { slug }
@@ -26,6 +26,11 @@ struct Foodbank: Codable, Identifiable {
 
         let measurementString = measurement.formatted(.measurement(width: .wide))
         return "\(measurementString) from you"
+    }
+
+    var neededItems: [String] {
+        let baseList = items.needs.components(separatedBy: .newlines)
+        return Set(baseList).sorted()
     }
 }
 
