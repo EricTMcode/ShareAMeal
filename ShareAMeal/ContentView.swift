@@ -23,7 +23,7 @@ struct ContentView: View {
                         Label("My Foodbank", systemImage: "building.2")
                     }
 
-                Text("Drop-off Points")
+                DropOffView(foodbank: selectedFoodbank)
                     .tabItem {
                         Label("Drop-off Points", systemImage: "basket")
                     }

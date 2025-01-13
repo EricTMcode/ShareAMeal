@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EnterLocationView: View {
-    @State private var postCode = "SW1 1AA"
+    @State private var postCode = "SW11AA"
 
     var body: some View {
         NavigationStack {

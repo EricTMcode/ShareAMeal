@@ -10,7 +10,7 @@ import Foundation
 
 struct Foodbank: Codable, Identifiable {
     enum CodingKeys: String, CodingKey {
-        case slug, name, phone, email, address, distance = "distance_m", items = "needs"
+        case slug, name, phone, email, address, distance = "distance_m", location = "lat_lng", items = "needs", alternativeItems = "need", locations
     }
 
     var id: String { slug }
@@ -19,23 +19,38 @@ struct Foodbank: Codable, Identifiable {
     var phone: String
     var email: String
     var address: String
-    var distance: Int
-    var items: Items
+    var distance: Int?
+    var location: String
+    var items: Items?
+    var alternativeItems: Items?
     var locations: [Location]?
 
     var distanceFormatted: String {
+        guard let distance else { return "Unknown distance from you" }
+
         let measurement = Measurement(value: Double(distance), unit: UnitLength.meters)
 
         let measurementString = measurement.formatted(.measurement(width: .wide))
         return "\(measurementString) from you"
     }
 
+    var actualItems: Items {
+        items ?? alternativeItems ?? Items(id: "None", needs: "None")
+    }
+
     var neededItems: [String] {
-        let baseList = items.needs.components(separatedBy: .newlines)
+        let baseList = actualItems.needs.components(separatedBy: .newlines)
         return Set(baseList).sorted()
     }
 
-    static let example = Foodbank(name: "Example Name", slug: "Example Slug", phone: "Phone", email: "Email", address: "Address", distance: 1000, items: .example)
+    var coodinate: CLLocationCoordinate2D? {
+        let components = location.split(separator: ",").compactMap(Double.init)
+        guard components.count == 2 else { return nil }
+
+        return CLLocationCoordinate2D(latitude: components[0], longitude: components[1])
+    }
+
+    static let example = Foodbank(name: "Example Name", slug: "Example Slug", phone: "Phone", email: "Email", address: "Address", distance: 1000, location: "0,0", items: .example)
 }
 
 extension Foodbank {
